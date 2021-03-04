@@ -28,7 +28,7 @@ class AccomplishmentController extends Controller
     		$accomplishment = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
     	}
     	
-        return view('Accomplishment.index',compact('date','user','accomplishment'));
+        return view('accomplishment.index',compact('date','user','accomplishment'));
     }
 
      public function searchs(Request $request)
@@ -64,7 +64,7 @@ class AccomplishmentController extends Controller
 
 
     	$accomplishment = $accomplishment->paginate(30);
-        return view('Accomplishment.index',compact('date','user','accomplishment'));
+        return view('accomplishment.index',compact('date','user','accomplishment'));
     }
 
     public function store(Request $request)
