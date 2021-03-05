@@ -79,12 +79,9 @@
                         <label for="division">Division<i style="color: red">*</i></label>
                         <select class="form-control division" autofocus @if($user->division != null)disabled @endif>
                           <option selected="true" disabled>Choose</option>
-                          <option value="ADMIN">ADMIN</option>
-                          <option value="APRD">APRD</option>
-                          <option value="L & D">L & D</option>
-                          <option value="PQMRR">PQMRR</option>
-                          <option value="PBD">PBD</option>
-                          <option value="PESD">PESD</option>
+                          @foreach($division as $divisions)
+                          <option value="{{ $divisions->id }}">{{ $divisions->name }}</option>
+                            @endforeach
                         </select>
                   </div>
                   @endif
@@ -185,7 +182,7 @@
        $('.save').click(function() {
             $.post('{{ route("accomplishment.store") }}', {
                         "_token": "{{ csrf_token() }}",
-                        division: $('.division').val(),
+                        division_id: $('.division').val(),
                         date: $('.date').val(),
                         natur_accomp: $('.natur_accomp').val(),
                         accomplishment: $('.accomplishment').val(),

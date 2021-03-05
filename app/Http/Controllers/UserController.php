@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Division;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,15 +17,15 @@ class UserController extends Controller
 
     public function index()
     {
-    	
-    	$user = $this->model->latest()->paginate(30);
+    	$division = Division::orderBy('name','asc')->get();
+    	$user = $this->model->with('division')->latest()->paginate(30);
 
-        return view('user.index', compact('user'));
+        return view('user.index', compact('user','division'));
     }
 
     public function search(Request $request)
     {
-
+        $division = Division::orderBy('name','asc')->get();
     	if( $request->search) {
 
     		$user = $this->model->Where('cats', 'like', '%' . $request->search . '%')
@@ -40,7 +41,7 @@ class UserController extends Controller
         }
 
     	$user = $user->paginate(30);
-        return view('user.index',compact('user'));
+        return view('user.index',compact('user','division'));
     }
 
     public function store(Request $request)
@@ -50,9 +51,8 @@ class UserController extends Controller
                 'FLAST'  =>  'required',
                 'FFIRST'  =>  'required',
                 'FMI'  =>  'required',
-                'division'  =>  'required',
+                'division_id'  =>  'required',
             ]);
-
 
     		$request['password'] = Hash::make('1');
 
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function user_edit(Request $request) 
     {
 
-        return $this->model->where('id', $request->id)->first();
+        return $this->model->with('division')->where('id', $request->id)->first();
     }
 
     public function user_update(Request $request) 
@@ -72,7 +72,7 @@ class UserController extends Controller
                 'FLAST'  =>  'required',
                 'FFIRST'  =>  'required',
                 'FMI'  =>  'required',
-                'division'  =>  'required',
+                'division_id'  =>  'required',
             ]);
 
         $user = $this->model->where('id', $request->id)->first();

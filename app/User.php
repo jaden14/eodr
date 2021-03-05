@@ -39,4 +39,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Accomplishment');
     }
+
+    public function division()
+    {
+        return $this->belongsTo('App\Division');
+    }
 }

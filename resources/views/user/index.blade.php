@@ -45,7 +45,7 @@
                                     <td>{{ $users->FLAST }}</td>
                                     <td>{{ $users->FFIRST }}</td>
                                     <td>{{ $users->FMI }}</td>
-                                    <td>{{ $users->division }}</td>
+                                    <td>{{ $users->division['name'] }}</td>
                                    	<td>
                                     <div role="group" class="btn-group">
                                         <button data-id="{{ $users->id }}"  class="btn btn-link btn-sm btn_edit"><span class="fa fa-edit"></span></button>
@@ -106,12 +106,9 @@
                         <label for="producers_id">Division<i style="color: red">*</i></label>
                         <select class="form-control division" autofocus>
                         	<option selected="true" disabled>Choose</option>
-                        	<option value="ADMIN">ADMIN</option>
-                        	<option value="APRD">APRD</option>
-                        	<option value="L & D">L & D</option>
-                        	<option value="PQMRR">PQMRR</option>
-                        	<option value="PBD">PBD</option>
-                        	<option value="PESD">PESD</option>
+                            @foreach($division as $divisions)
+                        	<option value="{{ $divisions->id }}">{{ $divisions->name }}</option>
+                            @endforeach
                         </select>
                   </div>
             </div>  
@@ -164,12 +161,9 @@
                         <label for="producers_id">Division<i style="color: red">*</i></label>
                         <select class="form-control ddivision" autofocus>
                         	<option selected="true" disabled>Choose</option>
-                        	<option value="ADMIN">ADMIN</option>
-                        	<option value="APRD">APRD</option>
-                        	<option value="L & D">L & D</option>
-                        	<option value="PQMRR">PQMRR</option>
-                        	<option value="PBD">PBD</option>
-                        	<option value="PESD">PESD</option>
+                        	 @foreach($division as $divisions)
+                            <option value="{{ $divisions->id }}">{{ $divisions->name }}</option>
+                            @endforeach
                         </select>
                   </div>
             </div>  
@@ -198,7 +192,7 @@
                         FLAST: $('.lname').val(),
                         FFIRST: $('.fname').val(),
                         FMI: $('.mname').val(),
-                        division: $('.division').val(),
+                        division_id: $('.division').val(),
                     })
                     .done(function (response) {
                         $.notify("Done", "success");
@@ -228,7 +222,7 @@
                 $('.llname').val(response.FLAST)
                 $('.ffname').val(response.FFIRST)
                 $('.mmname').val(response.FMI)
-                $('.ddivision').val(response.division)
+                $('.ddivision').val(response.division_id)
             })
 
           })
@@ -243,7 +237,7 @@
                         FLAST: $('.llname').val(),
                         FFIRST: $('.ffname').val(),
                         FMI: $('.mmname').val(),
-                        division: $('.ddivision').val(),
+                        division_id: $('.ddivision').val(),
                     })
                     .done(function (response) {
                         $('#editModal').modal('hide');

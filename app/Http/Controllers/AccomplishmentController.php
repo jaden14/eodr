@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Division;
 use App\Accomplishment;
 use App\User;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class AccomplishmentController extends Controller
     {
     	$date = Carbon::now();
     	$user = auth::user();
+        $division = division::orderBy('name','asc')->get();
 
     	if($user->user_type =='administrator') {
 
@@ -28,13 +30,14 @@ class AccomplishmentController extends Controller
     		$accomplishment = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
     	}
     	
-        return view('accomplishment.index',compact('date','user','accomplishment'));
+        return view('accomplishment.index',compact('date','user','accomplishment','division'));
     }
 
      public function searchs(Request $request)
     {
     	$date = Carbon::now();
     	$user = auth::user();
+        $division = division::orderBy('name','asc')->get();
 
     	if($user->user_type =='administrator') {
 
@@ -64,23 +67,23 @@ class AccomplishmentController extends Controller
 
 
     	$accomplishment = $accomplishment->paginate(30);
-        return view('accomplishment.index',compact('date','user','accomplishment'));
+        return view('accomplishment.index',compact('date','user','accomplishment','division'));
     }
 
     public function store(Request $request)
     {
     	$request->validate([
-    			'division'  =>  'sometimes|required',
+    			'division_id'  =>  'sometimes|required',
                 'date'  =>  'required',
                 'natur_accomp'  =>  'required',
                 'accomplishment'  =>  'required',
             ]);
 
-    	if($request->division != null)
+    	if($request->division_id != null)
     	{
     		$user = User::where('id', $request->id)->first();
 
-    		$user->division = $request->division;
+    		$user->division_id = $request->division_id;
     		$user->update();
     	}
 
