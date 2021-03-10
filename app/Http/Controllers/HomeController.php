@@ -2,27 +2,32 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index( Request $Request)
     {
-        $this->middleware('auth');
+        return view('welcome',[]);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function verify(Request $request)
     {
-        return view('home');
+        if(Auth::attempt([
+            'cats' => $request->cats,
+            'password' => $request->password,
+
+        ]) && Auth::user()->user_type =='Supervisor') {
+            $request->session()->regenerate();
+
+            return redirect()->intended( url('/accomplishment'));
+        } else {
+            Auth::logout();
+                   return redirect('/supervisor_login')->with('delete', 'Your account is not Supervisor');
+        }
     }
+    
 }

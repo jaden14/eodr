@@ -28,7 +28,7 @@
                             </div>
                             
                         </div>
-                                <input id="password" type="hidden" class="form-control @error('password') is-invalid @enderror" name="password" value="1">
+                                <input id="password" type="hidden" class="form-control @error('password') is-invalid @enderror" name="password" value="12345678">
 
                         <div class="form-group mb-0">
                             <div class="col-md-8">
@@ -39,6 +39,14 @@
                         </div>
                     </center>
                     </form>
+                    <div class="form-group" style="margin-left: 120px;">
+                            <div class="col-md-12">
+                    Login for Supervisor. click           
+                    <a href="{{ url('supervisor_login') }}">
+                                    <span style="color: blue;font-size: 12px;">here</span>
+                    </a>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

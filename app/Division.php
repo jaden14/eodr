@@ -8,8 +8,9 @@ class Division extends Model
 {
     protected $guarded = [];
 
-    public function user()
+
+    public function office()
     {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\Office');
     }
 }

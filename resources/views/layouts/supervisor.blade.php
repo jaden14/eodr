@@ -54,14 +54,6 @@ body {
                          <li class="nav-item">
                             <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
                         </li>
-                        @endif
-                        @if(Auth::user()->user_type =='administrator')
-                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/offices') }}">Offices</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/division') }}">Division</a>
                         </li>

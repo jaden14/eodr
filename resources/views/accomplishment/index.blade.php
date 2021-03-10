@@ -14,7 +14,8 @@
                     <br>
                     <div class="row ">
                         <div class="col-md-4">
-                            <form action="{{ route('searchs') }}" method="GET" role="search">
+                                @if(auth::user()->user_type == 'User' || auth::user()->user_type == null || auth::user()->user_type == 'administrator')
+                              <form action="{{ route('searchs') }}" method="GET" role="search">
                                 <div class="form-group">    
                                     <div class="input-group-prepend">
                                  
@@ -22,7 +23,23 @@
                                         <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button> 
                                     </div>
                                 </div>
-                            </form>
+                              </form>
+                               @endif
+                               @if(auth::user()->user_type == 'Supervisor')
+                               <form action="{{ route('searchs') }}" method="GET" role="search">
+                                <div class="form-group">    
+                                    <div class="input-group-prepend">
+                                 
+                                    <select name="name" class="form-control btn btn-sm" style="background: transparent; border: 1px solid #CCC;"  onchange='this.form.submit()'>
+                                    <option disabled selected>choose</option>
+                                    @foreach($users as $use)
+                                    <option value="{{ $use->id }}">{{ $use->FLAST }}, {{ $use->FFIRST }}</option>
+                                    @endforeach
+                                </select> 
+                                    </div>
+                                </div>
+                                @endif
+                             </form>
                         </div>      
                     </div> 
                    <div class="comments">
@@ -42,11 +59,18 @@
                                     <button data-id="{{ $accomp->id }}" class="btn btn-link text-danger btn-sm btn_delete"><span class="fa fa-trash"></span></button>
                                 </span>
                               </p>
+                              @if($accomp->quantity != null)
+                              <p class="commenter-time text-muted" style="font-size: 11px;">Qty: <b>{{ $accomp->quantity }}</b>
+                              </p>
+                              @endif
                               </span> 
                                   
                               <p class="comment-txt more"><b style="font-size: 12px; font-family: serif;">Accomplishment <br>
                               </b>{{ $accomp->accomplishment }}
                             </p>
+                            @if(auth::user()->user_type == 'Supervisor')
+                                <p class="commenter-time text-muted" style="font-size: 10px;">{{ $accomp->user->FLAST }}, {{ $accomp->user->FFIRST }}</p>
+                              @endif
                             </div>
                       @empty
                         <div class="comment-box">
@@ -74,14 +98,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                  @if($user->division == null)
+                  @if($user->office_id == 0)
                   <div class="form-group">
-                        <label for="division">Division<i style="color: red">*</i></label>
-                        <select class="form-control division" autofocus @if($user->division != null)disabled @endif>
-                          <option selected="true" disabled>Choose</option>
-                          @foreach($division as $divisions)
-                          <option value="{{ $divisions->id }}">{{ $divisions->name }}</option>
+                        <label for="cats">Office Name<i style="color: red">*</i></label>
+                        <select class="form-control office" autofocus>
+                            <option selected disabled>choose</option>
+                            @foreach($office as $offices)
+                            <option value="{{ $offices->id }}">{{ $offices->name }}</option>
                             @endforeach
+                        </select>
+                        
+                        <br>
+
+                        <label for="producers_id">Division<i style="color: red">*</i></label>
+                        <select id="division" class="form-control division" autofocus data-selected-division="{{ old('division') }}">
+                          
                         </select>
                   </div>
                   @endif
@@ -109,7 +140,7 @@
             
                   <div class="form-group">
                         <label for="quantity">Quantity</label>
-                        <input type="text"placeholder="Your Answer" class="form-control quantity" autofocus>
+                        <input type="text"placeholder="Your Answer" class="form-control quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
                   </div>
             </div>   
             <div class="modal-footer">
@@ -158,7 +189,7 @@
             
                   <div class="form-group">
                         <label for="quantity">Quantity</label>
-                        <input type="text"placeholder="Your Answer" class="form-control quantities" autofocus>
+                        <input type="text"placeholder="Your Answer" class="form-control quantities" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
                   </div>
             </div>   
             <div class="modal-footer">
@@ -183,6 +214,7 @@
             $.post('{{ route("accomplishment.store") }}', {
                         "_token": "{{ csrf_token() }}",
                         division_id: $('.division').val(),
+                        office_id: $('.office').val(),
                         date: $('.date').val(),
                         natur_accomp: $('.natur_accomp').val(),
                         accomplishment: $('.accomplishment').val(),
@@ -280,5 +312,56 @@
             })
 
         })
+
+    $(document).ready(function(){
+   $(document).on('change','.office',function(){
+      // console.log("hmm its change");
+
+      var office_id=$(this).val();
+       console.log(office_id);
+      var div=$(this).parent();
+
+      var op=" ";
+
+      $.ajax({
+        type:'get',
+        url:'{!!URL::to('accomplishment_division')!!}',
+        data:{'id':office_id},
+        success:function(data){
+          //console.log('success');
+
+          //console.log(data);
+
+          console.log(data.length);
+          if(data == '')
+          {
+            op+='<option selected disabled></option>';
+            div.find('.division').val(data.name);
+          }
+          else {
+            op+='<option selected disabled></option>';
+            }
+          for(var i=0;i<data.length;i++){
+          op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+           }
+
+           div.find('.division').html(" ");
+           div.find('.division').append(op);
+
+          var division = $("#division").attr("data-selected-division");
+          if(division !== '')
+          {
+          // assign chosen data attribute value to select
+           $("#division").val(division);
+           $("#division").change(); 
+          }
+        },
+        error:function(){
+
+        }
+      });
+    });
+
+  });
 </script>
 @endsection

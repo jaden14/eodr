@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Division;
 use App\User;
+use App\Office;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,21 +19,53 @@ class UserController extends Controller
 
     public function index()
     {
-    	$division = Division::orderBy('name','asc')->get();
-    	$user = $this->model->with('division')->latest()->paginate(30);
 
-        return view('user.index', compact('user','division'));
+    	$office = Office::orderBy('name','asc')->get();
+        $user = auth::user();
+
+        if($user->user_type =='Supervisor') {
+
+    	$user = $this->model->with('division')->where('office_id', $user->office_id)->latest()->paginate(30);
+
+        } else {
+            $user = $this->model->with('division')->latest()->paginate(30);
+        }
+
+        return view('user.index', compact('user','office'));
+    }
+
+    public function create()
+    {
+        return view('user.create');
+    }
+
+     public function employees_division(Request $request)
+     {
+    
+        //if our chosen id and products table prod_cat_id col match the get first 100 data 
+
+        //$request->id here is the id of our chosen option id
+        $data=Division::select('name','id')->where('office_id',$request->id)->orderBy('name','asc')->get();
+
+        return response()->json($data);//then sent this data to ajax success
     }
 
     public function search(Request $request)
     {
-        $division = Division::orderBy('name','asc')->get();
+        $office = Office::orderBy('name','asc')->get();
+        $user = auth::user();
+
     	if( $request->search) {
 
-    		$user = $this->model->Where('cats', 'like', '%' . $request->search . '%')
-    							->OrWhere('FLAST', 'like', '%' . $request->search . '%')
-    							->OrWhere('FFIRST', 'like', '%' . $request->search . '%')
-    							->OrWhere('FMI', 'like', '%' . $request->search . '%');
+            if($user->user_type =='Supervisor') {
+
+    		$user = $this->model->where('office_id', $user->office_id)
+                                ->Where('cats', 'like', '%' . $request->search . '%');
+    												
+            } else {
+                $user = $this->model->Where('cats', 'like', '%' . $request->search . '%');
+
+            }
     	}
 
 
@@ -41,7 +75,7 @@ class UserController extends Controller
         }
 
     	$user = $user->paginate(30);
-        return view('user.index',compact('user','division'));
+        return view('user.index',compact('user','office'));
     }
 
     public function store(Request $request)
@@ -51,10 +85,13 @@ class UserController extends Controller
                 'FLAST'  =>  'required',
                 'FFIRST'  =>  'required',
                 'FMI'  =>  'required',
+                'office_id' => 'required',
                 'division_id'  =>  'required',
+                'user_type' => 'required',
+                'password'  =>  'required',
             ]);
 
-    		$request['password'] = Hash::make('1');
+    		$request['password'] = Hash::make($request->password);
 
     	return $this->model->create($request->all());
     }
@@ -72,7 +109,9 @@ class UserController extends Controller
                 'FLAST'  =>  'required',
                 'FFIRST'  =>  'required',
                 'FMI'  =>  'required',
+                'office_id' => 'required',
                 'division_id'  =>  'required',
+                'user_type' => 'required',
             ]);
 
         $user = $this->model->where('id', $request->id)->first();

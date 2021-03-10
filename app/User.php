@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Division');
     }
+
+    public function office()
+    {
+        return $this->belongsTo('App\Office');
+    }
 }

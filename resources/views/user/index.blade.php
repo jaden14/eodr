@@ -3,11 +3,13 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-11">
             <div class="card">
                 <div class="card-header">List of Employees
                 	<span style="float: right;">
-                       	<button  class="btn btn-primary btn-sm add"><i class="fa fa-plus-circle"></i> add</button> 
+                        @if(auth::user()->user_type =='administrator')
+                       	<button  class="btn btn-primary btn-sm add"><i class="fa fa-plus-circle"></i> add</button>
+                        @endif 
                     </span>
                 </div>
 
@@ -33,9 +35,12 @@
                                 <th class="sorting" style="width: 10%; cursor: pointer;">Cats No.</th>
                                 <th class="sorting" style="width: 20%; cursor: pointer;">Last Name</th>
                                 <th class="sorting" style="width: 20%; cursor: pointer;">First Name</th>
-                                <th class="sorting" style="width: 20%; cursor: pointer;">Middle Name</th>
+                                <th class="sorting" style="width: 10%; cursor: pointer;">Middle Name</th>
+                                <th class="sorting" style="width: 10%; cursor: pointer;">Office</th>
                                 <th class="sorting" style="width: 20%; cursor: pointer;">Division</th>
+                                @if(auth::user()->user_type =='administrator')
                                 <th class="text-center sorting" style="width: 10%; cursor: pointer;">Action</th>
+                                @endif
                                 </tr>
                             </thead>
                             @forelse($user as $users)
@@ -45,7 +50,9 @@
                                     <td>{{ $users->FLAST }}</td>
                                     <td>{{ $users->FFIRST }}</td>
                                     <td>{{ $users->FMI }}</td>
+                                    <td>{{ $users->office['name'] }}</td>
                                     <td>{{ $users->division['name'] }}</td>
+                                    @if(auth::user()->user_type =='administrator')
                                    	<td>
                                     <div role="group" class="btn-group">
                                         <button data-id="{{ $users->id }}"  class="btn btn-link btn-sm btn_edit"><span class="fa fa-edit"></span></button>
@@ -53,11 +60,12 @@
                                         <button data-id="{{ $users->id }}" class="btn btn-link text-danger btn-sm btn_delete"><span class="fa fa-trash"></span></button>
 
                                     </div>
-                                    </td>     
+                                    </td>
+                                     @endif 
                                 </tr>
                             </tbody>
                            	@empty
-                                <td colspan="6">No records found.</td>
+                                <td colspan="7">No records found.</td>
                            	@endforelse
                         </table>
                         	{{ $user->appends(request()->except('page'))->links() }}
@@ -96,20 +104,40 @@
                         <input type="text"placeholder="First Name" class="form-control fname" autofocus>
                   </div>
             
-            
                   <div class="form-group">
                         <label for="FMI">Middle Name<i style="color: red">*</i></label>
                         <input type="text"placeholder="Middle Name" class="form-control mname" autofocus>
                   </div>
-            
+
                   <div class="form-group">
-                        <label for="producers_id">Division<i style="color: red">*</i></label>
-                        <select class="form-control division" autofocus>
-                        	<option selected="true" disabled>Choose</option>
-                            @foreach($division as $divisions)
-                        	<option value="{{ $divisions->id }}">{{ $divisions->name }}</option>
+                        <label for="cats">Office Name<i style="color: red">*</i></label>
+                        <select class="form-control office" autofocus>
+                            <option selected disabled>choose</option>
+                            @foreach($office as $offices)
+                            <option value="{{ $offices->id }}">{{ $offices->name }}</option>
                             @endforeach
                         </select>
+                        
+                        <br>
+
+                        <label for="producers_id">Division<i style="color: red">*</i></label>
+                        <select id="division" class="form-control division" autofocus data-selected-division="{{ old('division') }}">
+                        	
+                        </select>
+                  </div>
+
+                  <div class="form-group">
+                        <label for="user_type">User Type<i style="color: red">*</i></label>
+                        <select class="form-control user_type" autofocus>
+                            <option selected disabled>choose</option>
+                            <option value="Supervisor">SUPERVISOR</option>
+                            <option value="User">User</option>
+                        </select>
+                  </div>
+
+                  <div class="form-group">
+                        <label for="password">Password(defualt 12345678)<i style="color: red">*</i></label>
+                        <input type="password" placeholder="Password" value="12345678" class="form-control password" autofocus>
                   </div>
             </div>  
             <div class="modal-footer">
@@ -138,7 +166,7 @@
                   <div class="form-group">
                         <label for="cats">Cats Number<i style="color: red">*</i></label>
                         <input type="text"placeholder="Cats Number" class="form-control catss" autofocus oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                        <input type="hidden" name="id" readonly class="form-control id" autofocus style="border:none;">
+                        
                   </div>
             
                   <div class="form-group">
@@ -158,12 +186,29 @@
                   </div>
             
                   <div class="form-group">
-                        <label for="producers_id">Division<i style="color: red">*</i></label>
-                        <select class="form-control ddivision" autofocus>
-                        	<option selected="true" disabled>Choose</option>
-                        	 @foreach($division as $divisions)
-                            <option value="{{ $divisions->id }}">{{ $divisions->name }}</option>
+                        <label for="cats">Office Name<i style="color: red">*</i></label>
+                        <select class="form-control offices" autofocus>
+                            <option selected disabled>choose</option>
+                            @foreach($office as $offices)
+                            <option value="{{ $offices->id }}">{{ $offices->name }}</option>
                             @endforeach
+                        </select>
+                        
+                        <br>
+
+                        <label for="producers_id">Division<i style="color: red">*</i></label>
+                        <select id="divisions" class="form-control divisions" autofocus data-selected-divisions="{{ old('division') }}">
+
+                        </select>
+                        <input type="hidden" name="id" readonly class="form-control id" autofocus style="border:none;">
+                  </div>
+
+                  <div class="form-group">
+                        <label for="user_type">User Type<i style="color: red">*</i></label>
+                        <select class="form-control user_types" autofocus>
+                            <option selected disabled>choose</option>
+                            <option value="Supervisor">SUPERVISOR</option>
+                            <option value="User">User</option>
                         </select>
                   </div>
             </div>  
@@ -192,7 +237,10 @@
                         FLAST: $('.lname').val(),
                         FFIRST: $('.fname').val(),
                         FMI: $('.mname').val(),
+                        office_id: $('.office').val(),
                         division_id: $('.division').val(),
+                        user_type: $('.user_type').val(),
+                        password: $('.password').val(),
                     })
                     .done(function (response) {
                         $.notify("Done", "success");
@@ -222,7 +270,12 @@
                 $('.llname').val(response.FLAST)
                 $('.ffname').val(response.FFIRST)
                 $('.mmname').val(response.FMI)
-                $('.ddivision').val(response.division_id)
+                $('.offices').val(response.office_id)
+
+                
+                $('.divisions').append($("<option />").val(response.division_id).text(response.division.name));
+               
+                $('.user_types').val(response.user_type)
             })
 
           })
@@ -237,7 +290,9 @@
                         FLAST: $('.llname').val(),
                         FFIRST: $('.ffname').val(),
                         FMI: $('.mmname').val(),
-                        division_id: $('.ddivision').val(),
+                        office_id: $('.offices').val(),
+                        division_id: $('.divisions').val(),
+                        user_type: $('.user_types').val(),
                     })
                     .done(function (response) {
                         $('#editModal').modal('hide');
@@ -286,6 +341,108 @@
             })
 
         })
+
+$(document).ready(function(){
+   $(document).on('change','.office',function(){
+      // console.log("hmm its change");
+
+      var office_id=$(this).val();
+       console.log(office_id);
+      var div=$(this).parent();
+
+      var op=" ";
+
+      $.ajax({
+        type:'get',
+        url:'{!!URL::to('employees_division')!!}',
+        data:{'id':office_id},
+        success:function(data){
+          //console.log('success');
+
+          //console.log(data);
+
+          console.log(data.length);
+          if(data == '')
+          {
+            op+='<option selected disabled></option>';
+            div.find('.division').val(data.name);
+          }
+          else {
+            op+='<option selected disabled></option>';
+            }
+          for(var i=0;i<data.length;i++){
+          op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+           }
+
+           div.find('.division').html(" ");
+           div.find('.division').append(op);
+
+          var division = $("#division").attr("data-selected-division");
+          if(division !== '')
+          {
+          // assign chosen data attribute value to select
+           $("#division").val(division);
+           $("#division").change(); 
+          }
+        },
+        error:function(){
+
+        }
+      });
+    });
+
+  });
+
+$(document).ready(function(){
+   $(document).on('change','.offices',function(){
+      // console.log("hmm its change");
+
+      var office_id=$(this).val();
+       console.log(office_id);
+      var div=$(this).parent();
+
+      var op=" ";
+
+      $.ajax({
+        type:'get',
+        url:'{!!URL::to('employees_division')!!}',
+        data:{'id':office_id},
+        success:function(data){
+          //console.log('success');
+
+          //console.log(data);
+
+          console.log(data.length);
+          if(data == '')
+          {
+            op+='<option selected disabled></option>';
+            div.find('.divisions').val(data.name);
+          }
+          else {
+            op+='<option selected disabled></option>';
+            }
+          for(var i=0;i<data.length;i++){
+          op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+           }
+
+           div.find('.divisions').html(" ");
+           div.find('.divisions').append(op);
+
+          var divisions = $("#divisions").attr("data-selected-divisions");
+          if(divisions !== '')
+          {
+          // assign chosen data attribute value to select
+           $("#divisions").val(divisions);
+           $("#divisions").change(); 
+          }
+        },
+        error:function(){
+
+        }
+      });
+    });
+
+  });
 </script>
 
 @endsection
