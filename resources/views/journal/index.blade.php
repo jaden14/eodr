@@ -19,8 +19,10 @@
                               <form action="{{ route('searchsss') }}" method="GET" role="search">
                                 <div class="form-group">    
                                     <div class="input-group-prepend">
-                                 
+                                        <span style="padding-top: 8px;">From: </span>
                                         <input type="date" class="form-control"  name="search" >
+                                        <span style="padding-top: 8px;">To: </span>
+                                        <input type="date" class="form-control"  name="search2" >
                                         <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button> 
                                     </div>
                                 </div>

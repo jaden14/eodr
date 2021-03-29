@@ -92,13 +92,13 @@ class AccomplishmentController extends Controller
 
         else {
 
-    		if( $request->search) {
+    		if($request->search && $request->search2) {
 
-    		$accomplishment = $this->model->Where('date',$request->search)->where('user_id', $user->id);
+    		$accomplishment = $this->model->Wherebetween('date',[$request->search, $request->search2])->where('user_id', $user->id);
 
     		}
 
-    		if( $request->search == null) {
+    		if( $request->search == null || $request->search2 == null) {
 
             return redirect('/accomplishment');
        	 	}

@@ -71,13 +71,13 @@ class JournalController extends Controller
 
         else {
 
-    		if( $request->search) {
+    		if( $request->search && $request->search2) {
 
-    		$journal = $this->model->Where('date',$request->search)->where('user_id', $user->id);
+    		$journal = $this->model->Wherebetween('date',[$request->search, $request->search2])->where('user_id', $user->id);
 
     		}
 
-    		if( $request->search == null) {
+    		if( $request->search == null || $request->search2 == null) {
 
             return redirect('/journal');
        	 	}
