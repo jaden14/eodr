@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Office');
     }
+
+    public function journal()
+    {
+        return $this->hasMany('App\Journal');
+    }
 }

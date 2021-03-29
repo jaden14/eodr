@@ -61,4 +61,14 @@ Route::get('/division_search', 'DivisionController@division_search')->name('divi
 
 Route::resource('/Supervisor', 'SupervisorController');
 
+Route::resource('/targets', 'TargetController');
+Route::post('/targets/target_edit', 'TargetController@target_edit')->name('targetedit');
+Route::post('/targets/target_update', 'TargetController@target_update')->name('targetupdate');
+Route::post('/targets/target_delete', 'TargetController@target_delete')->name('targetdelete');
+
+Route::resource('/journal', 'JournalController');
+Route::post('/journal/journal_edit', 'JournalController@journal_edit')->name('journaledit');
+Route::post('/journal/journal_update', 'JournalController@journal_update')->name('journalupdate');
+Route::post('/journal/journal_delete', 'JournalController@journal_delete')->name('journaldelete');
+Route::get('/journal_searchs', 'JournalController@searchsss')->name('searchsss');
 

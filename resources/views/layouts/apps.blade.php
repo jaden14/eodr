@@ -50,6 +50,10 @@ body {
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/accomplishment') }}">Accomplishments</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('journal.index') }}">Journals</a>
+                        </li>
+                        
                         @if(Auth::user()->user_type =='Supervisor')
                          <li class="nav-item">
                             <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
