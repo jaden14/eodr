@@ -23,4 +23,5 @@ class Target extends Model
     {
         return $this->hasMany('App\Accomplishment');
     }
+
 }

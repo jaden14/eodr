@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Target;
 use App\Output;
 use Illuminate\Http\Request;
+use App\Accomplishment;
 use Auth;
 
 class TargetController extends Controller
@@ -18,9 +19,15 @@ class TargetController extends Controller
     public function index()
     {
     	$user = auth::user();
+
+        $targets = Target::first();
+
     	$target = $this->model->with('user','output','accomplishment')->where('user_id', $user->id)->get();
 
-        return view('target.index',compact('target','user'));
+        $accomplishment = Accomplishment::where('user_id', $user->id)->first();
+       
+
+        return view('target.index',compact('target','user','accomplishment'));
     }
 
     public function store(Request $request)

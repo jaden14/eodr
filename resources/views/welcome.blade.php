@@ -18,7 +18,7 @@
 </div>
 
 @endif
-                            <h1><b>EODR SUPERVISOR LOGIN</b></h1>
+                            <h1><b>END OF DAY REPORT</b></h1>
                             <div class="col-md-8">
                             <div class="dropdown-divider" style="border-top: 1px solid #212529"></div>
                             </div>

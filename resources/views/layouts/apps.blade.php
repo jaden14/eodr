@@ -53,7 +53,11 @@ body {
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('journal.index') }}">Journals</a>
                         </li>
-                        
+                        @if(Auth::user()->user_type !='administrator')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/targets') }}">Targets</a>
+                        </li>
+                        @endif
                         @if(Auth::user()->user_type =='Supervisor')
                          <li class="nav-item">
                             <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
@@ -84,6 +88,9 @@ body {
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('employees.edit', Auth::user()->id) }}">
+                                        <i class="fa fa-lock"> {{ __('Change Password') }}</i>
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

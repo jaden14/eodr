@@ -8,6 +8,8 @@ use App\User;
 use App\Office;
 use Illuminate\Http\Request;
 Use Carbon\Carbon;
+use App\Target;
+use App\Output;
 use Auth;
 
 class AccomplishmentController extends Controller
@@ -25,6 +27,7 @@ class AccomplishmentController extends Controller
         $users = User::where('office_id', $user->office_id)->get();
         $office = Office::orderBy('name','asc')->get();
         $division = division::orderBy('name','asc')->get();
+        $target = Target::with('output')->orderBy('code','asc')->get();
 
     	if($user->user_type =='administrator') {
 
@@ -41,7 +44,7 @@ class AccomplishmentController extends Controller
             $accomplishment = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
         }
     	
-        return view('accomplishment.index',compact('date','user','accomplishment','division','office','users'));
+        return view('accomplishment.index',compact('date','user','accomplishment','division','office','users','target'));
     }
 
     public function accomplishment_division(Request $request)
@@ -62,6 +65,7 @@ class AccomplishmentController extends Controller
         $users = User::where('office_id', $user->office_id)->get();
         $office = Office::orderBy('name','asc')->get();
         $division = division::orderBy('name','asc')->get();
+        $target = Target::with('output')->orderBy('code','asc')->get();
         $flast = $request->get('name');
 
     	if($user->user_type =='administrator') {
@@ -104,7 +108,7 @@ class AccomplishmentController extends Controller
 
 
     	$accomplishment = $accomplishment->paginate(30);
-        return view('accomplishment.index',compact('date','user','accomplishment','division','office','users'));
+        return view('accomplishment.index',compact('date','user','accomplishment','division','office','users','target'));
     }
 
     public function store(Request $request)
@@ -132,6 +136,7 @@ class AccomplishmentController extends Controller
     		$data['accomplishment'] = $request->accomplishment;
     		$data['quantity'] = $request->quantity;
     		$data['user_id'] = $request->id;
+            $data['target_id'] = $request->target;
         	
         	$accomplishment = $this->model->create($data);
 

@@ -30,10 +30,13 @@
                                     <td>{{ $targets->code }}</td>
                                     <td>{{ $targets->qty }}</td>
                                     <td>{{ $targets->output->indicator }}</td>
+
+                                   
                                     <td>
                                         
                                     </td>
-                                    <td>
+                                   
+                                    <td> 
                                     <div role="group" class="btn-group">
                                         <button data-id="{{ $targets->id }}"  class="btn btn-link btn-sm btn_edit"><span class="fa fa-edit"></span></button>
 

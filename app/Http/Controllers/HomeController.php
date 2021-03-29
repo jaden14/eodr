@@ -25,8 +25,7 @@ class HomeController extends Controller
 
             return redirect()->intended( url('/accomplishment'));
         } else {
-            Auth::logout();
-                   return redirect('/supervisor_login')->with('delete', 'Your account is not Supervisor');
+            return redirect()->intended( url('/accomplishment'));
         }
     }
     

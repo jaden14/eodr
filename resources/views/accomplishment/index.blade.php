@@ -48,7 +48,9 @@
                               <span class="commenter-time text-muted">
                                 <p>{{ $accomp->natur_accomp }}&nbsp;&nbsp;
                             
-                                <span class="comment-time text-muted"> Posted on {{ $accomp->date }}</span>
+                                <span class="comment-time text-muted"> Posted on {{ $accomp->date }} 
+                                  @if($accomp->target_id != null)<i style="color: green;">✔</i> @endif
+                                </span>
                                 &nbsp;&nbsp;
                                 @if(auth::user()->user_type == 'administrator')
                                 {{ $accomp->user->cats }}
@@ -142,6 +144,17 @@
                         <label for="quantity">Quantity</label>
                         <input type="text"placeholder="Your Answer" class="form-control quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
                   </div>
+
+                  <div class="form-group">
+                        <label for="nature_accomp">Target</label>
+                        <select class="form-control target" autofocus>
+                          <option selected disabled>Choose</option>
+                          @foreach($target as $targets)
+                          <option value="{{ $targets->id }}">{{ $targets->output->indicator }}</option>
+                          @endforeach
+                        </select>
+                        
+                  </div>
             </div>   
             <div class="modal-footer">
                   <span class="text-warning"> 
@@ -191,6 +204,17 @@
                         <label for="quantity">Quantity</label>
                         <input type="text"placeholder="Your Answer" class="form-control quantities" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
                   </div>
+
+                  <div class="form-group">
+                        <label for="nature_accomp">Target</label>
+                        <select class="form-control targets" autofocus>
+                          <option selected disabled>Choose</option>
+                          @foreach($target as $targets)
+                          <option value="{{ $targets->id }}">{{ $targets->output->indicator }}</option>
+                          @endforeach
+                        </select>
+                        
+                  </div>
             </div>   
             <div class="modal-footer">
                   <span class="text-warning"> 
@@ -219,6 +243,7 @@
                         natur_accomp: $('.natur_accomp').val(),
                         accomplishment: $('.accomplishment').val(),
                         quantity: $('.quantity').val(),
+                        target: $('.target').val(),
                         id: $('.id').val(),
                     })
                     .done(function (response) {
@@ -248,6 +273,7 @@
                 $('.natur_accomps').val(response.natur_accomp)
                 $('.accomplishments').val(response.accomplishment)
                 $('.quantities').val(response.quantity)
+                $('.targets').val(response.target_id)
                 $('.ids').val(id)
                 
             })
@@ -263,6 +289,7 @@
                         date: $('.dates').val(),
                         natur_accomp: $('.natur_accomps').val(),
                         accomplishment: $('.accomplishments').val(),
+                        target_id: $('.targets').val(),
                         quantity: $('.quantities').val(),
                     })
                     .done(function (response) {

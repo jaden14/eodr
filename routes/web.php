@@ -16,7 +16,7 @@ Route::get('/', function () {
 
     	return redirect('accomplishment');
     } else {
-        return view('auth.login');
+        return view('welcome');
     }
 });
 

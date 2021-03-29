@@ -39,8 +39,32 @@ class UserController extends Controller
         return view('user.create');
     }
 
-     public function employees_division(Request $request)
-     {
+    public function edit($id)
+    {
+        $users = User::findOrFail($id);
+
+        return view('user.edit', compact('users'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find(auth()->user()->id);
+        $validate = $request->validate([
+           'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        if (Hash::check($request->current_password, $user->password) && $request->password == $request->password_confirmation) {
+            $user->password = bcrypt($request->password);
+            $user->update();
+
+            return back()->with('success', 'Password Changed');
+        } else {
+            return back()->with('delete', 'Current Password Not match!!');
+        }
+    }
+
+    public function employees_division(Request $request)
+    {
     
         //if our chosen id and products table prod_cat_id col match the get first 100 data 
 
