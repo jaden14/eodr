@@ -62,7 +62,7 @@
                               </p>
                               </span> 
                                   
-                              <p class="comment-txt more"><b style="font-size: 12px; font-family: serif;">Where To: <br>
+                              <p class="comment-txt more"><b style="font-size: 12px; font-family: serif;">Where About: <br>
                               </b>{{ $journals->whereto }}
                             </p>
                             </div>
@@ -105,7 +105,7 @@
                   </div>
             
                   <div class="form-group">
-                        <label for="accomplishment">Where To<i style="color: red">*</i></label>
+                        <label for="accomplishment">Where About<i style="color: red">*</i></label>
                         <textarea class="form-control whereto" autofocus rows="5"></textarea>
 
                   </div>
@@ -145,7 +145,7 @@
                   </div>
             
                   <div class="form-group">
-                        <label for="accomplishment">Where To<i style="color: red">*</i></label>
+                        <label for="accomplishment">Where About<i style="color: red">*</i></label>
                         <textarea class="form-control wheretos" autofocus rows="5"></textarea>
 
                   </div>
