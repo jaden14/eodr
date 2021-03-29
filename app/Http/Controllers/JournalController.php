@@ -21,7 +21,21 @@ class JournalController extends Controller
     	$date = Carbon::now();
     	$user = auth::user();
     	$users = User::where('office_id', $user->office_id)->get();
-    	$journal = $this->model->paginate(30);
+
+    	if($user->user_type =='administrator') {
+
+    		$journal = $this->model->latest()->paginate(30);
+
+    	} elseif($user->user_type =='Supervisor') {
+
+    		$journal = $this->model->with('user')->WhereHas('user', function ($q) use ($user) {
+                    return $q->where('office_id',$user->office_id);
+                })->orderBy('date','desc')->latest()->paginate(30);;
+
+    	} else {
+
+            $journal = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
+        }
 
     	return view('journal.index',compact('journal','user','date','users'));
     }
