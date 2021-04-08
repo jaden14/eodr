@@ -22,20 +22,7 @@ class JournalController extends Controller
     	$user = auth::user();
     	$users = User::where('office_id', $user->office_id)->get();
 
-    	if($user->user_type =='administrator') {
-
-    		$journal = $this->model->latest()->paginate(30);
-
-    	} elseif($user->user_type =='Supervisor') {
-
-    		$journal = $this->model->with('user')->WhereHas('user', function ($q) use ($user) {
-                    return $q->where('office_id',$user->office_id);
-                })->orderBy('date','desc')->latest()->paginate(30);;
-
-    	} else {
-
-            $journal = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
-        }
+        $journal = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
 
     	return view('journal.index',compact('journal','user','date','users'));
     }
@@ -45,33 +32,8 @@ class JournalController extends Controller
     	$date = Carbon::now();
     	$user = auth::user();
     	$users = User::where('office_id', $user->office_id)->get();
-    	$flast = $request->get('name');
-
-    	if($user->user_type =='administrator') {
-
-    		if( $request->search) {
-
-    		$journal = $this->model->Where('date',$request->search);
-    		} 
-
-    	       if( $request->search == null) {
-
-            return redirect('/journal');
-            }
-
-    	}  elseif($user->user_type == 'Supervisor') {
-            
-            if($flast) {
-                $journal = $this->model->WhereHas('user', function ($q) use ($flast) {
-                    return $q->where('user_id', $flast);
-                });
-            }
-        }
-
-
-        else {
-
-    		if( $request->search && $request->search2) {
+    	
+    	if( $request->search && $request->search2) {
 
     		$journal = $this->model->Wherebetween('date',[$request->search, $request->search2])->where('user_id', $user->id);
 
@@ -81,7 +43,6 @@ class JournalController extends Controller
 
             return redirect('/journal');
        	 	}
-    	}
 
     	$journal = $journal->paginate(30);
         return view('journal.index',compact('date','user','journal','users'));

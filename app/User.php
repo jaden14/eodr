@@ -40,6 +40,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Accomplishment');
     }
 
+    public function accomplishments()
+    {
+        return $this->belongsTo('App\Accomplishment');
+    }
+
     public function division()
     {
         return $this->belongsTo('App\Division');
@@ -53,5 +58,10 @@ class User extends Authenticatable
     public function journal()
     {
         return $this->hasMany('App\Journal');
+    }
+
+    public function member()
+    {
+        return $this->hasMany('App\Member');
     }
 }

@@ -7,13 +7,18 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>End of Day Report</title>
+    <title>Activity</title>
 
     <!-- Scripts -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+        
+    
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -50,9 +55,29 @@ body {
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/accomplishment') }}">Accomplishments</a>
                         </li>
+                        @if(Auth::user()->user_type !='administrator')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('journal.index') }}">Journals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/targets') }}">Targets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/export') }}">Exports</a>
+                        </li>
+                        @endif
                         @if(Auth::user()->user_type =='Supervisor')
                          <li class="nav-item">
                             <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
+                        </li>
+                        @endif
+                        @if(Auth::user()->user_type =='administrator')
+
+                         <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/offices') }}">Offices</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/division') }}">Division</a>
@@ -93,10 +118,12 @@ body {
             @yield('content')
         </main>
     </div>
-    <script src="{{ asset('js/dropdown.jquery.min.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}" ></script>
-    <script src="{{ asset('js/notify.min.js') }}"></script>
+
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('js/notify.min.js') }}"></script>
     <script src="{{ asset('js/swal.min.js') }}"></script>
      @yield('scripts')
 </body>

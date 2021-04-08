@@ -110,6 +110,16 @@
                   </div>
 
                   <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email"placeholder="Email Address" class="form-control email" autofocus>
+                  </div>
+
+                  <div class="form-group">
+                        <label for="phone_no">Phone Number</label>
+                        <input type="text"placeholder="Phone Number" class="form-control phone_no" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
+                  </div>
+
+                  <div class="form-group">
                         <label for="cats">Office Name<i style="color: red">*</i></label>
                         <select class="form-control office" autofocus>
                             <option selected disabled>choose</option>
@@ -124,6 +134,11 @@
                         <select id="division" class="form-control division" autofocus data-selected-division="{{ old('division') }}">
                         	
                         </select>
+                  </div>
+
+                  <div class="form-group">
+                        <label for="role">Role</label>
+                        <input type="text"placeholder="role" class="form-control role" autofocus>
                   </div>
 
                   <div class="form-group">
@@ -184,6 +199,16 @@
                         <label for="FMI">Middle Name<i style="color: red">*</i></label>
                         <input type="text"placeholder="Middle Name" class="form-control mmname" autofocus>
                   </div>
+
+                  <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email"placeholder="Email Address" class="form-control emails" autofocus>
+                  </div>
+
+                  <div class="form-group">
+                        <label for="phone_no">Phone Number</label>
+                        <input type="text"placeholder="Phone Number" class="form-control phone_nos" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
+                  </div>
             
                   <div class="form-group">
                         <label for="cats">Office Name<i style="color: red">*</i></label>
@@ -201,6 +226,11 @@
 
                         </select>
                         <input type="hidden" name="id" readonly class="form-control id" autofocus style="border:none;">
+                  </div>
+
+                  <div class="form-group">
+                        <label for="role">Role</label>
+                        <input type="text"placeholder="role" class="form-control roles" autofocus>
                   </div>
 
                   <div class="form-group">
@@ -237,8 +267,11 @@
                         FLAST: $('.lname').val(),
                         FFIRST: $('.fname').val(),
                         FMI: $('.mname').val(),
+                        email: $('.email').val(),
+                        phone_no: $('.phone_no').val(),
                         office_id: $('.office').val(),
                         division_id: $('.division').val(),
+                        role: $('.role').val(),
                         user_type: $('.user_type').val(),
                         password: $('.password').val(),
                     })
@@ -271,6 +304,9 @@
                 $('.ffname').val(response.FFIRST)
                 $('.mmname').val(response.FMI)
                 $('.offices').val(response.office_id)
+                $('.emails').val(response.email)
+                $('.phone_nos').val(response.phone_no)
+                $('.roles').val(response.role)
 
                 
                 $('.divisions').append($("<option />").val(response.division_id).text(response.division.name));
@@ -290,8 +326,11 @@
                         FLAST: $('.llname').val(),
                         FFIRST: $('.ffname').val(),
                         FMI: $('.mmname').val(),
+                        email: $('.emails').val(),
+                        phone_no: $('.phone_nos').val(),
                         office_id: $('.offices').val(),
                         division_id: $('.divisions').val(),
+                        role: $('.roles').val(),
                         user_type: $('.user_types').val(),
                     })
                     .done(function (response) {

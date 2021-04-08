@@ -20,11 +20,6 @@ Route::get('/', function () {
     }
 });
 
-Route::get('/supervisor_login', function () {
-	
-        return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('home', [HomeController::class, 'index'])->name('home');
@@ -71,4 +66,9 @@ Route::post('/journal/journal_edit', 'JournalController@journal_edit')->name('jo
 Route::post('/journal/journal_update', 'JournalController@journal_update')->name('journalupdate');
 Route::post('/journal/journal_delete', 'JournalController@journal_delete')->name('journaldelete');
 Route::get('/journal_searchs', 'JournalController@searchsss')->name('searchsss');
+
+Route::resource('/committe', 'CommitteeController');
+
+Route::resource('/export', 'ExportController');
+Route::get('export', 'ExportController@export');
 

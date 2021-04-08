@@ -15,7 +15,6 @@
                     <br>
                     <div class="row ">
                         <div class="col-md-4">
-                                @if(auth::user()->user_type == 'User' || auth::user()->user_type == null || auth::user()->user_type == 'administrator')
                               <form action="{{ route('searchsss') }}" method="GET" role="search">
                                 <div class="form-group">    
                                     <div class="input-group-prepend">
@@ -27,22 +26,6 @@
                                     </div>
                                 </div>
                               </form>
-                               @endif
-                               @if(auth::user()->user_type == 'Supervisor')
-                               <form action="{{ route('searchsss') }}" method="GET" role="search">
-                                <div class="form-group">    
-                                    <div class="input-group-prepend">
-                                 
-                                    <select name="name" class="form-control btn btn-sm" style="background: transparent; border: 1px solid #CCC;"  onchange='this.form.submit()'>
-                                    <option disabled selected>choose</option>
-                                    @foreach($users as $use)
-                                    <option value="{{ $use->id }}">{{ $use->FLAST }}, {{ $use->FFIRST }}</option>
-                                    @endforeach
-                                </select> 
-                                    </div>
-                                </div>
-                                @endif
-                             </form>
                         </div>      
                     </div> 
                    <div class="comments">

@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>End of Day Report</title>
+    <title>Activity</title>
 
     <!-- Scripts -->
 
@@ -38,7 +38,7 @@ body {
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/accomplishment') }}">
-                    End of Day Report
+                    Activity
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -50,12 +50,16 @@ body {
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/accomplishment') }}">Accomplishments</a>
                         </li>
+                        
+                        @if(Auth::user()->user_type !='administrator')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('journal.index') }}">Journals</a>
                         </li>
-                        @if(Auth::user()->user_type !='administrator')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/targets') }}">Targets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/export') }}">Exports</a>
                         </li>
                         @endif
                         @if(Auth::user()->user_type =='Supervisor')
@@ -64,6 +68,7 @@ body {
                         </li>
                         @endif
                         @if(Auth::user()->user_type =='administrator')
+
                          <li class="nav-item">
                             <a class="nav-link" href="{{ url('/employees') }}">Employees</a>
                         </li>

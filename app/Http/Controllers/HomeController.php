@@ -20,7 +20,8 @@ class HomeController extends Controller
             'cats' => $request->cats,
             'password' => $request->password,
 
-        ]) && Auth::user()->user_type =='Supervisor') {
+        ]) && Auth::user()->user_type =='Supervisor') 
+        {
             $request->session()->regenerate();
 
             return redirect()->intended( url('/accomplishment'));
