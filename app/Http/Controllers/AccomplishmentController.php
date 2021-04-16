@@ -31,17 +31,17 @@ class AccomplishmentController extends Controller
 
     	if($user->user_type =='administrator') {
 
-    		$accomplishment = $this->model->latest()->paginate(30);
+    		$accomplishment = $this->model->orderBy('date','desc')->paginate(20);
 
     	} elseif($user->user_type =='Supervisor') {
 
     		$accomplishment = $this->model->with('user')->WhereHas('user', function ($q) use ($user) {
                     return $q->where('office_id',$user->office_id);
-                })->orderBy('date','desc')->latest()->paginate(30);;
+                })->orderBy('date','desc')->orderBy('date','desc')->paginate(20);;
 
     	} else {
 
-            $accomplishment = $this->model->with('user')->where('user_id', $user->id)->latest()->paginate(30);
+            $accomplishment = $this->model->with('user')->where('user_id', $user->id)->orderBy('date','desc')->paginate(20);
         }
     	
         return view('accomplishment.index',compact('date','user','accomplishment','division','office','users','target'));
@@ -131,16 +131,25 @@ class AccomplishmentController extends Controller
     		$user->update();
     	}
 
-    		$data['date'] = $request->date;
+            $dates = $request->date;
+            $dated = $request->dated;
+
+
+            for($dates; $dates <= $dated; $dates++)
+            {
+
+    		$data['date'] = $dates;
     		$data['natur_accomp'] = $request->natur_accomp;
     		$data['accomplishment'] = $request->accomplishment;
     		$data['quantity'] = $request->quantity;
     		$data['user_id'] = $request->id;
             $data['target_id'] = $request->target;
         	
-        	$accomplishment = $this->model->create($data);
+        	$this->model->create($data);
 
-    		return $accomplishment;
+            }
+
+    		return redirect('/accomplishment');
     }
 
     public function acc_edit(Request $request) 

@@ -122,8 +122,13 @@
                   @endif
                    <input type="hidden" name="id" value="{{ $user->id }}" readonly class="form-control id" autofocus style="border:none;">
                   <div class="form-group">
-                        <label for="date">Date<i style="color: red">*</i></label>
+                        <label for="date">Date From<i style="color: red">*</i></label>
                         <input type="date" value="{{ $date->format('Y-m-d') }}" class="form-control date" autofocus>
+                  </div>
+
+                  <div class="form-group">
+                        <label for="date">Date To<i style="color: red">*</i></label>
+                        <input type="date" value="{{ $date->format('Y-m-d') }}" class="form-control dated" autofocus>
                   </div>
             
                   <div class="form-group">
@@ -242,6 +247,7 @@
                         division_id: $('.division').val(),
                         office_id: $('.office').val(),
                         date: $('.date').val(),
+                        dated: $('.dated').val(),
                         natur_accomp: $('.natur_accomp').val(),
                         accomplishment: $('.accomplishment').val(),
                         quantity: $('.quantity').val(),
