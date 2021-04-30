@@ -11,7 +11,7 @@ class Target extends Model
 
     public function output()
     {
-        return $this->belongsTo('App\Output');
+        return $this->hasMany('App\Output');
     }
 
     public function user()

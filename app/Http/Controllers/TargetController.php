@@ -6,6 +6,7 @@ use App\Target;
 use App\Output;
 use Illuminate\Http\Request;
 use App\Accomplishment;
+use DB;
 use Auth;
 
 class TargetController extends Controller
@@ -20,14 +21,19 @@ class TargetController extends Controller
     {
     	$user = auth::user();
 
-        $targets = Target::first();
+        $targeted = Target::first();
 
-    	$target = $this->model->with('user','output','accomplishment')->where('user_id', $user->id)->get();
+        $output = Output::select(DB::raw('count(period_from) as counted, period_to, period_from, target_id, user_id'))->with('target')->where('user_id', $user->id)->groupBy('period_from','period_to','target_id')->orderBy('period_from','desc')->paginate(30);
 
-        $accomplishment = Accomplishment::where('user_id', $user->id)->first();
+    	$target = $this->model->with([
+    'accomplishment' => function ($query) use ($targeted) {
+        $query->whereBetween('date', [$targeted->period_from, $targeted->period_to])->where('user_id', auth::user()->id);
+    }])->where('position', $user->FPOSITION)->where('office_id', $user->office_id)->get();
+
+
+        $accomplishment = Accomplishment::where('user_id', $user->id)->get();
        
-
-        return view('target.index',compact('target','user','accomplishment'));
+        return view('target.index',compact('target','user','accomplishment','targeted','output'));
     }
 
     public function store(Request $request)
@@ -38,18 +44,16 @@ class TargetController extends Controller
                 'code'  =>  'required',
                 'indicator'  =>  'required',
                 'qty'  =>  'required',
+                'position' => 'required',
             ]);
-
-    		$output['indicator'] = $request->indicator;
-
-    		$output = Output::create($output);
 
     		$data['period_from'] = $request->period_from;
     		$data['period_to'] = $request->period_to;
     		$data['code'] = $request->code;
-    		$data['output_id'] = $output->id;
+            $data['indicator'] = $request->indicator;
     		$data['qty'] = $request->qty;
-    		$data['user_id'] = $request->user_id;
+            $data['office_id'] = Auth::user()->office_id;
+    		$data['position'] = $request->position;
 
 
     		$target = $this->model->create($data);
@@ -60,7 +64,7 @@ class TargetController extends Controller
     public function target_edit(Request $request) 
     {
 
-        return $this->model->with('output')->where('id', $request->id)->first();
+        return $this->model->where('id', $request->id)->first();
     }
 
     public function target_update(Request $request) 
@@ -71,19 +75,18 @@ class TargetController extends Controller
                 'code'  =>  'required',
                 'indicator'  =>  'required',
                 'qty'  =>  'required',
+                'position' => 'required',
             ]);
-
-        $output = Output::where('id', $request->output_id)->first();
-
-        $output->indicator = $request->indicator;
-        $output->update();
 
         $target = $this->model->where('id', $request->id)->first();
 
         $target->period_from = $request->period_from;
         $target->period_to = $request->period_to;
         $target->code = $request->code;
+        $target->indicator = $request->indicator;
         $target->qty = $request->qty;
+        $target->office_id = auth::user()->office_id;
+        $target->position = $request->position;
         $target->update();
 
         return $target;

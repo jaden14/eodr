@@ -17,4 +17,9 @@ class Accomplishment extends Model
     {
         return $this->belongsTo('App\Target');
     }
+
+    public function output()
+    {
+        return $this->hasMany('App\Output');
+    }
 }

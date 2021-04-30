@@ -54,9 +54,7 @@
                                   @if($accomp->target_id != null)<i style="color: green;">✔</i> @endif
                                 </span>
                                 &nbsp;&nbsp;
-                                @if(auth::user()->user_type == 'administrator')
-                                {{ $accomp->user->cats }}
-                                @endif
+                                
                                 <span style="float: right;">
                                   
                                     <button data-id="{{ $accomp->id }}"  class="btn btn-link btn-sm btn_edit"><span class="fa fa-edit"></span></button>
@@ -157,7 +155,7 @@
                         <select class="form-control target" autofocus>
                           <option selected disabled>Choose</option>
                           @foreach($target as $targets)
-                          <option value="{{ $targets->id }}">{{ $targets->output->indicator }}</option>
+                          <option value="{{ $targets->id }}">{{ $targets->indicator }}</option>
                           @endforeach
                         </select>
                         
@@ -217,7 +215,7 @@
                         <select class="form-control targets" autofocus>
                           <option selected disabled>Choose</option>
                           @foreach($target as $targets)
-                          <option value="{{ $targets->id }}">{{ $targets->output->indicator }}</option>
+                          <option value="{{ $targets->id }}">{{ $targets->indicator }}</option>
                           @endforeach
                         </select>
                         

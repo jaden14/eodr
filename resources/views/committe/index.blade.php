@@ -127,6 +127,12 @@
         $.each(response.responseJSON.errors, function (key, item) 
           {
             $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+
+              setTimeout(function () {
+                $("#errors").fadeTo(2000, 500).slideUp(500, function () {
+                    $("#errors").remove();
+                });
+              }, 5000);//5000=5 seconds
           });
 
                 

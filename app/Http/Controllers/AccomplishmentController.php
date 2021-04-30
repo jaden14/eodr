@@ -27,7 +27,8 @@ class AccomplishmentController extends Controller
         $users = User::where('office_id', $user->office_id)->get();
         $office = Office::orderBy('name','asc')->get();
         $division = division::orderBy('name','asc')->get();
-        $target = Target::with('output')->orderBy('code','asc')->get();
+        $target = target::where('position', $user->FPOSITION)->where('office_id', $user->office_id)->get();
+
 
     	if($user->user_type =='administrator') {
 
@@ -131,6 +132,7 @@ class AccomplishmentController extends Controller
     		$user->update();
     	}
 
+
             $dates = $request->date;
             $dated = $request->dated;
 
@@ -145,9 +147,25 @@ class AccomplishmentController extends Controller
     		$data['user_id'] = $request->id;
             $data['target_id'] = $request->target;
         	
-        	$this->model->create($data);
+        	$accomplishment = $this->model->create($data);
+
+            if($request->target != null)
+                {
+                    $target = Target::find($request->target);
+
+                    $output['period_from'] = $target->period_from;
+                    $output['period_to'] = $target->period_to;
+                    $output['date'] = $request->date;
+                    $output['accomplishment_id'] = $accomplishment->id;
+                    $output['target_id'] = $target->id;
+                    $output['user_id'] = auth::user()->id;
+
+                    Output::create($output);
+                }
 
             }
+
+
 
     		return redirect('/accomplishment');
     }
@@ -170,13 +188,46 @@ class AccomplishmentController extends Controller
 
         $accomplishment->update($request->all());
 
+        $target = Output::where('accomplishment_id', $request->id)->first();
+
+        if(!empty($target))
+        {
+
+        $target->date = $request->date;
+        $target->target_id = $request->target_id;
+        $target->update();
+
+        }
+
+        if($request->target_id != null)
+        {
+            $target = Target::find($request->target_id);
+
+                    $output['period_from'] = $target->period_from;
+                    $output['period_to'] = $target->period_to;
+                    $output['date'] = $request->date;
+                    $output['accomplishment_id'] = $accomplishment->id;
+                    $output['target_id'] = $request->target_id;
+                    $output['user_id'] = auth::user()->id;
+
+                    Output::create($output);
+        }
+
+
         return $accomplishment;
     }
 
     public function acc_delete(Request $request) 
     {
         $data = $this->model->where('id', $request->id)->first();
-        
+
+        $target = Output::where('accomplishment_id', $request->id)->first();
+
+        if(!empty($target))
+        {
+            $target->delete();
+        }
+
         $data->delete();
 
         return $data;

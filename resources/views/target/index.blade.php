@@ -13,13 +13,15 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
+                        <a href="#" class="output">Output</a> 
                         <table class="table table-hover table-bordered table-sm">
                             <thead>
                                 <tr>
+                                <th class="sorting" style="width: 15%; cursor: pointer;">Period From</th>
+                                <th class="sorting" style="width: 15%; cursor: pointer;">Period To</th>
                                 <th class="sorting" style="width: 10%; cursor: pointer;">Code</th>
                                 <th class="sorting" style="width: 10%; cursor: pointer;">Target</th>
-                                <th class="sorting" style="width: 60%; cursor: pointer;">Indicator</th>
-                                <th class="sorting" style="width: 10%; cursor: pointer;">acquired Target</th>
+                                <th class="sorting" style="width: 50%; cursor: pointer;">Indicator</th>
                                 <th class="text-center sorting" style="width: 10%; cursor: pointer;">Action</th>
                                 
                                 </tr>
@@ -27,15 +29,11 @@
                             @forelse($target as $targets)
                             <tbody>
                                 <tr>
+                                    <td>{{ date('F, Y', strtotime($targets->period_from)) }}</td>
+                                    <td>{{ date('F, Y', strtotime($targets->period_to)) }}</td>
                                     <td>{{ $targets->code }}</td>
                                     <td>{{ $targets->qty }}</td>
-                                    <td>{{ $targets->output->indicator }}</td>
-
-                                   
-                                    <td>
-                                        
-                                    </td>
-                                   
+                                    <td>{{ $targets->indicator }}</td>
                                     <td> 
                                     <div role="group" class="btn-group">
                                         <button data-id="{{ $targets->id }}"  class="btn btn-link btn-sm btn_edit"><span class="fa fa-edit"></span></button>
@@ -47,11 +45,11 @@
                                 </tr>
                             </tbody>
                             @empty
-                                <td colspan="5">No records found.</td>
+                                <td colspan="6">No records found.</td>
                             @endforelse
                         </table>
-                          
                     </div>
+
                 </div>
             </div>
         </div>
@@ -85,13 +83,15 @@
                   <div class="form-group">
                         <label for="indicator">Indicator<i style="color: red">*</i></label>
                         <textarea class="form-control indicator" autofocus rows="5"></textarea>
-
                   </div>
                   <div class="form-group">
                         <label for="Quantity">Quantity<i style="color: red">*</i></label>
                         <input type="text"placeholder="Your Answer" class="form-control qty" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
                   </div>
-                  <input type="hidden" name="id" value="{{ auth::user()->id }}" class="form-control user_id" autofocus style="border:none;">
+                  <div class="form-group">
+                       
+                        <input type="hidden" class="form-control position" value="{{ $user->FPOSITION }}" autofocus >
+                  </div>
             </div>   
             <div class="modal-footer">
                   <span class="text-warning"> 
@@ -104,7 +104,7 @@
     </div>
 </div>
 
-<!--Add-->
+<!--edit-->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -131,14 +131,15 @@
                   <div class="form-group">
                         <label for="indicator">Indicator<i style="color: red">*</i></label>
                         <textarea class="form-control indicators" autofocus rows="5"></textarea>
-
                   </div>
                   <div class="form-group">
                         <label for="Quantity">Quantity<i style="color: red">*</i></label>
                         <input type="text"placeholder="Your Answer" class="form-control qtys" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
                   </div>
+                  <div class="form-group">
+                        <input type="hidden" class="form-control positions" value="{{ $user->FPOSITION }}" autofocus >
+                  </div>
                   <input type="hidden" name="id"  class="form-control id" autofocus style="border:none;">
-                  <input type="hidden"  class="form-control output_id" autofocus style="border:none;">
             </div>   
             <div class="modal-footer">
                   <span class="text-warning"> 
@@ -146,6 +147,55 @@
                             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </span>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--output-->
+<div class="modal fade" id="output" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static"  data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Output Target</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                                <tr>
+                                <th  rowspan="2" class="sorting" style="width: 30%; cursor: pointer;">Date</th>
+                                <th class="sorting" style="width: 10%; cursor: pointer;">Code</th>
+                                <th class="sorting" style="width: 10%; cursor: pointer;">Target</th>
+                                <th class="sorting" style="width: 40%; cursor: pointer;">Indicator</th>
+                                <th class="sorting" style="width: 10%; cursor: pointer;">Acquired</th>
+                                
+                                </tr>
+                            </thead>
+                         @forelse($output as $outputs)
+                         <tbody>
+                                <tr>
+                                    <td rowspan="2">{{ date('F, Y', strtotime($outputs->period_from)) }} - {{ date('F, Y', strtotime($outputs->period_to)) }}</td> 
+                                    <td>{{ $outputs->target->code }}</td>
+                                    <td>{{ $outputs->target->qty }}</td>
+                                    <td>{{ $outputs->target->indicator }}</td>
+                                    <td>{{ $outputs->counted }}</td>
+                                </tr>
+                                 
+                                
+                            </tbody>
+                        @empty
+                                <td colspan="5">No records found.</td>
+                        @endforelse
+                    </table>
+                </table>
+                </div>
+                  {{ $output->appends(request()->except('page'))->links() }}
+            </div>   
+            <div class="modal-footer">
             </div>
         </div>
     </div>
@@ -159,6 +209,10 @@
             $('#myModal').modal('show')
         })
 
+         $('.output').click(function(){
+            $('#output').modal('show')
+        })
+
         $('.save').click(function() {
             $.post('{{ route("targets.store") }}', {
                         "_token": "{{ csrf_token() }}",
@@ -167,7 +221,7 @@
                         code: $('.code').val(),
                         indicator: $('.indicator').val(),
                         qty: $('.qty').val(),
-                        user_id: $('.user_id').val(),
+                        position: $('.position').val(),
                     })
                     .done(function (response) {
                         $.notify("Done", "success");
@@ -195,10 +249,10 @@
                 $('.period_froms').val(response.period_from)
                 $('.period_tos').val(response.period_to)
                 $('.codes').val(response.code)
-                $('.indicators').val(response.output.indicator)
+                $('.indicators').val(response.indicator)
                 $('.qtys').val(response.qty)
                 $('.id').val(id)
-                $('.output_id').val(response.output_id)
+                $('.positions').val(response.position)
                 
             })
 
@@ -215,7 +269,7 @@
                         code: $('.codes').val(),
                         indicator: $('.indicators').val(),
                         qty: $('.qtys').val(),
-                        output_id: $('.output_id').val(),
+                        position: $('.positions').val(),
                     })
                     .done(function (response) {
                         $('#editModal').modal('hide');

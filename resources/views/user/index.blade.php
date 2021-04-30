@@ -110,6 +110,11 @@
                   </div>
 
                   <div class="form-group">
+                        <label for="position">Position<i style="color: red">*</i></label>
+                        <input type="text"placeholder="Position" class="form-control position" autofocus>
+                  </div>
+
+                  <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email"placeholder="Email Address" class="form-control email" autofocus>
                   </div>
@@ -199,6 +204,10 @@
                         <label for="FMI">Middle Name<i style="color: red">*</i></label>
                         <input type="text"placeholder="Middle Name" class="form-control mmname" autofocus>
                   </div>
+                  <div class="form-group">
+                        <label for="position">Position<i style="color: red">*</i></label>
+                        <input type="text"placeholder="Position" class="form-control positions" autofocus>
+                  </div>
 
                   <div class="form-group">
                         <label for="email">Email Address</label>
@@ -267,6 +276,7 @@
                         FLAST: $('.lname').val(),
                         FFIRST: $('.fname').val(),
                         FMI: $('.mname').val(),
+                        FPOSITION: $('.position').val(),
                         email: $('.email').val(),
                         phone_no: $('.phone_no').val(),
                         office_id: $('.office').val(),
@@ -303,6 +313,7 @@
                 $('.llname').val(response.FLAST)
                 $('.ffname').val(response.FFIRST)
                 $('.mmname').val(response.FMI)
+                $('.positions').val(response.FPOSITION)
                 $('.offices').val(response.office_id)
                 $('.emails').val(response.email)
                 $('.phone_nos').val(response.phone_no)
@@ -326,6 +337,7 @@
                         FLAST: $('.llname').val(),
                         FFIRST: $('.ffname').val(),
                         FMI: $('.mmname').val(),
+                        FPOSITION: $('.positions').val(), 
                         email: $('.emails').val(),
                         phone_no: $('.phone_nos').val(),
                         office_id: $('.offices').val(),
