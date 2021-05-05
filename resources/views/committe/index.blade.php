@@ -7,12 +7,42 @@
                 <div class="card">
                   <div class="card-body">
                   	<div class="mb-3">
+                      <span>Meetings</span>
                       @if(auth::user()->role == 'Secretariat')
                   		<span style="float: right;">
                        	<button  class="btn btn-primary btn-sm add"><i class="fa fa-plus-circle"></i> add</button> 
                     	</span>
                       @endif
                   	</div>
+                     
+                    <div class="comments">
+                      
+                            <div class="comment-box">
+                              <span class="commenter-time text-muted">
+                                <p>&nbsp;&nbsp;
+                            
+                                <span class="comment-time text-muted"> </span>
+                                &nbsp;&nbsp;
+                                
+                                <span style="float: right;">
+                                  
+                                    <button data-id=""  class="btn btn-link btn-sm btn_edit"><span class="fa fa-edit"></span></button>
+                                    <button data-id="" class="btn btn-link text-danger btn-sm btn_delete"><span class="fa fa-trash"></span></button>
+                                </span>
+                              </p>
+                              </span> 
+                                  
+                              <p class="comment-txt more"><b style="font-size: 12px; font-family: serif;">Where About: <br>
+                              </b>
+                            </p>
+                            </div>
+                     
+                        <div class="comment-box">
+                        <p>No Record.</p>
+                        </div>
+                     
+                        
+                    </div>
                   
                   </div>
                    

@@ -21,7 +21,10 @@ class CommitteeController extends Controller
     {
     	$user = User::get();
 
-        return view('committe.index',compact('user'));
+        $committe = $this->model->with('member','meeting')->get();
+
+
+        return view('committe.index',compact('user','committe'));
     }
 
     public function store(Request $request)
@@ -48,6 +51,7 @@ class CommitteeController extends Controller
     	$datas['particular'] = $request->particulars;
     	$datas['status'] = "Pending";
     	$datas['committee_id'] = $committe->id;
+        $datas['user_id'] = auth::user()->id;
 
     	$meetings = Meeting::create($datas);
 

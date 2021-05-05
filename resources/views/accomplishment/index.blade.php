@@ -4,6 +4,11 @@
 <div class="container">
     <div class="row justify-content-center">
        <div class="col-md-9">
+             @if ($message = Session::get('error'))
+                <div class="alert alert-error">
+                    <p>{{ $message }}</p>
+                </div>
+                @endif
                 <div class="card">
                   <div class="card-body">
                   	<div class="mb-3">
@@ -151,7 +156,7 @@
                   </div>
 
                   <div class="form-group">
-                        <label for="nature_accomp">Target</label>
+                        <label for="nature_accomp">Target <i style="color: red; font-size: 12px;">(Check your Target Dates before choosing.)</i></label>
                         <select class="form-control target" autofocus>
                           <option selected disabled>Choose</option>
                           @foreach($target as $targets)
@@ -211,7 +216,7 @@
                   </div>
 
                   <div class="form-group">
-                        <label for="nature_accomp">Target</label>
+                        <label for="nature_accomp">Target <i style="color: red; font-size: 12px;">(Check your target dates before choosing.)</i></label>
                         <select class="form-control targets" autofocus>
                           <option selected disabled>Choose</option>
                           @foreach($target as $targets)

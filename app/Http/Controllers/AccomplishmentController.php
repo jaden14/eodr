@@ -153,6 +153,9 @@ class AccomplishmentController extends Controller
                 {
                     $target = Target::find($request->target);
 
+                    if($dates <= $target->period_from && $dates >= $target->period_to)
+
+                    {   
                     $output['period_from'] = $target->period_from;
                     $output['period_to'] = $target->period_to;
                     $output['date'] = $request->date;
@@ -161,6 +164,7 @@ class AccomplishmentController extends Controller
                     $output['user_id'] = auth::user()->id;
 
                     Output::create($output);
+                    }
                 }
 
             }
@@ -192,16 +196,22 @@ class AccomplishmentController extends Controller
 
         if(!empty($target))
         {
+            if($request->date <= $target->period_from && $request->date >= $target->period_to)
+            {
 
-        $target->date = $request->date;
-        $target->target_id = $request->target_id;
-        $target->update();
+                $target->date = $request->date;
+                $target->target_id = $request->target_id;
+                $target->update();
+            }
 
         }
 
         if($request->target_id != null)
         {
             $target = Target::find($request->target_id);
+
+            if($request->date <= $target->period_from && $request->date >= $target->period_to)
+            { 
 
                     $output['period_from'] = $target->period_from;
                     $output['period_to'] = $target->period_to;
@@ -211,6 +221,7 @@ class AccomplishmentController extends Controller
                     $output['user_id'] = auth::user()->id;
 
                     Output::create($output);
+            } 
         }
 
 

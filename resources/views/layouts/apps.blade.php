@@ -50,6 +50,11 @@ body {
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/accomplishment') }}">Accomplishments</a>
                         </li>
+                        @if(Auth::user()->office_id == 1)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('http://serversql.dvodeoro.ph:8081/') }}">Service Ticketing</a>
+                        </li>
+                        @endif
                         
                         @if(Auth::user()->user_type !='administrator')
                         <li class="nav-item">
