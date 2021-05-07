@@ -20,8 +20,8 @@ class ExportController extends Controller
     	return view('export.index');
     }
 
-    public function export() 
+    public function export(Request $request) 
 	{
-        return Excel::download(new AccomplismentExport, 'Accomplishment.xlsx');
+        return Excel::download(new AccomplismentExport($request->date), 'Accomplishment.xlsx');
 	}
 }

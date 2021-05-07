@@ -8,6 +8,7 @@ use App\Meeting;
 use App\Committee;
 use Validator;
 use Illuminate\Http\Request;
+use auth;
 
 class CommitteeController extends Controller
 {
@@ -21,8 +22,11 @@ class CommitteeController extends Controller
     {
     	$user = User::get();
 
-        $committe = $this->model->with('member','meeting')->get();
-
+        $committe = $this->model->with('member.user.office','meeting')->WhereHas('meeting', function ($q) use ($user) {
+                    return $q->where('user_id',auth::user()->id);
+                })->orWhereHas('member', function ($q) use ($user) {
+                    return $q->where('user_id',auth::user()->id);
+                })->latest()->paginate(3);
 
         return view('committe.index',compact('user','committe'));
     }
@@ -70,5 +74,73 @@ class CommitteeController extends Controller
             
         }
            
+    }
+
+    public function committe_edit(Request $request) 
+    {
+
+        return $this->model->with('member','meeting')->where('id', $request->id)->first();
+    }
+
+    public function committe_update(Request $request)
+    {
+        $request->validate([
+                'name' => 'required',
+                'eo_number'  =>  'required',
+                'date'  =>  'required',
+                'time'  =>  'required',
+                'venue' => 'required',
+                'particulars' => 'required',
+            ]);
+
+        $committe = $this->model->where('id', $request->id)->first();
+
+        $meeting = Meeting::where('committee_id', $request->id)->first();
+
+        $committe->name = $request->name;
+        $committe->eo_number = $request->eo_number;
+        $committe->update();
+
+        $meeting->date = $request->date;
+        $meeting->time = $request->time;
+        $meeting->venue = $request->venue;
+        $meeting->particular = $request->particulars;
+        $meeting->status = $request->status;
+        $meeting->update();
+
+        if ($request->user_id != null) {
+            foreach ($request->user_id as $key => $value) {
+                Member::create(['committee_id'=>$request->id,'user_id'=>$value]);
+            }
+            
+        }
+        
+        return $committe;  
+    }
+
+    public function committe_delete(Request $request) 
+    {
+        $data = $this->model->where('id', $request->id)->first();
+
+        $member = Member::where('committee_id', $request->id)->first();
+
+        $meeting = Meeting::where('committee_id', $request->id)->first();
+
+        $meeting->delete();
+
+        $member->delete();
+        
+        $data->delete();
+
+        return $data;
+    }
+
+    public function member_delete(Request $request) 
+    {
+        $data = Member::where('user_id', $request->id)->first();
+        
+        $data->delete();
+
+        return $data;
     }
 }

@@ -68,7 +68,12 @@ Route::post('/journal/journal_delete', 'JournalController@journal_delete')->name
 Route::get('/journal_searchs', 'JournalController@searchsss')->name('searchsss');
 
 Route::resource('/committe', 'CommitteeController');
+Route::post('/committe/committe_edit', 'CommitteeController@committe_edit')->name('committeedit');
+Route::post('/committe/committe_update', 'CommitteeController@committe_update')->name('committeupdate');
+Route::post('/committe/committe_delete', 'CommitteeController@committe_delete')->name('committedelete');
+Route::post('/committe/member_delete', 'CommitteeController@member_delete')->name('memberdelete');
+
 
 Route::resource('/export', 'ExportController');
-Route::get('export', 'ExportController@export');
+Route::get('/exports', 'ExportController@export');
 

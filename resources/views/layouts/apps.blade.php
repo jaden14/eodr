@@ -55,16 +55,22 @@ body {
                             <a class="nav-link" href="{{ url('http://serversql.dvodeoro.ph:8081/') }}">Service Ticketing</a>
                         </li>
                         @endif
-                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/committe') }}">Committees</a>
+                        </li>
                         @if(Auth::user()->user_type !='administrator')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('journal.index') }}">Journals</a>
+                            <a class="nav-link" href="{{ route('journal.index') }}">Journals
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/targets') }}">Targets</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/export') }}">Exports</a>
+                        <li class="nav-item dropdown">
+                           <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="modal" data-target="#eligible_export" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Export
+                                </a>
+
                         </li>
                         @endif
                         @if(Auth::user()->user_type =='Supervisor')
@@ -117,6 +123,28 @@ body {
                 </div>
             </div>
         </nav>
+
+         <!-- modal for export -->
+<div class="modal fade" id="eligible_export" data-backdrop="static" data-keyboard="false" tabindex="1"  aria-labelledby="importLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/exports" id="import_form" method="Get">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="importLabel">Export File</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <input type="month" class="form-control-file" name="date" id="sample" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="action" value="vaccination" class="btn " style="background-color:#211401; color:white">Export File</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
         <main class="py-4">
             @yield('content')
