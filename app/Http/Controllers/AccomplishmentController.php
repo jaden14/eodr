@@ -158,9 +158,9 @@ class AccomplishmentController extends Controller
                     {   
                     $output['period_from'] = $target->period_from;
                     $output['period_to'] = $target->period_to;
-                    $output['date'] = $request->date;
+                    $output['date'] = $dates;
                     $output['accomplishment_id'] = $accomplishment->id;
-                    $output['target_id'] = $target->id;
+                    $output['target_id'] = $target->target;
                     $output['user_id'] = auth::user()->id;
 
                     Output::create($output);
