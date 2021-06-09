@@ -8,7 +8,7 @@ class Meeting extends Model
 {
     protected $guarded = [];
 
-    public function committe()
+    public function committee()
     {
         return $this->belongsTo('App\Committee');
     }

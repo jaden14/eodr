@@ -15,6 +15,6 @@ class Committee extends Model
 
     public function meeting()
     {
-        return $this->hasOne('App\Meeting');
+        return $this->hasMany('App\Meeting');
     }
 }

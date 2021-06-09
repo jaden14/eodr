@@ -60,8 +60,13 @@ body {
                             <a class="nav-link" href="{{ url('http://serversql.dvodeoro.ph:8081/') }}">Service Ticketing</a>
                         </li>
                         @endif
+                        @if(Auth::user()->role =='Secretariat')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/committe') }}">Committees</a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/meeting') }}">Meetings</a>
                         </li>
                         @if(Auth::user()->user_type !='administrator')
                         <li class="nav-item">
@@ -151,7 +156,6 @@ body {
         </div>
     </div>
 </div>
-
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>

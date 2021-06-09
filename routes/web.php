@@ -68,10 +68,19 @@ Route::post('/journal/journal_delete', 'JournalController@journal_delete')->name
 Route::get('/journal_searchs', 'JournalController@searchsss')->name('searchsss');
 
 Route::resource('/committe', 'CommitteeController');
+Route::post('/committe/committe_add', 'CommitteeController@committe_add')->name('committeadd');
 Route::post('/committe/committe_edit', 'CommitteeController@committe_edit')->name('committeedit');
+Route::post('/committe/committe_editperson', 'CommitteeController@committe_editperson')->name('committeeditperson');
+Route::post('/committe/committe_updateperson', 'CommitteeController@committe_updateperson')->name('committeupdateperson');
 Route::post('/committe/committe_update', 'CommitteeController@committe_update')->name('committeupdate');
 Route::post('/committe/committe_delete', 'CommitteeController@committe_delete')->name('committedelete');
 Route::post('/committe/member_delete', 'CommitteeController@member_delete')->name('memberdelete');
+
+Route::resource('/meeting', 'MeetingController');
+Route::post('/meeting/meeting_edit', 'MeetingController@meeting_edit')->name('meetingedit');
+Route::post('/meeting/meeting_update', 'MeetingController@meeting_update')->name('meetingupdate');
+Route::post('/meeting/meeting_delete', 'MeetingController@meeting_delete')->name('meetingdelete');
+
 
 
 Route::resource('/export', 'ExportController');
